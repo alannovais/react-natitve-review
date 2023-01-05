@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import type {Node} from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 
@@ -14,8 +14,10 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import ComponentsLogin from './src/components/login/login';
-import ComponentLobby from './src/components/lobby/lobby';
+import ComponentsLogin from './src/pages/login';
+import ComponentLobby from './src/pages/lobby';
+import TodoListManager from './src/pages/TodoListManager';
+import {createDB} from './src/db/createDB';
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -47,9 +49,12 @@ const Section = ({children, title}): Node => {
 
 const App: () => Node = () => {
   const Stack = createNativeStackNavigator();
+  useEffect(() => {
+    createDB();
+  }, []);
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Lobby">
         <Stack.Screen
           name="Home"
           options={{headerShown: false}}
@@ -59,6 +64,11 @@ const App: () => Node = () => {
           name="Lobby"
           options={{headerShown: false}}
           component={ComponentLobby}
+        />
+        <Stack.Screen
+          name="TodoListManager"
+          options={{headerShown: false}}
+          component={TodoListManager}
         />
       </Stack.Navigator>
     </NavigationContainer>
