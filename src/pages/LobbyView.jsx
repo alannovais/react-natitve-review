@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { openDatabase } from 'react-native-sqlite-storage';
-import { createDB } from '../db/createDB';
+import { openDatabase } from 'react-native-sqlite-storage';0
 
 var db = openDatabase({ name: 'TodoListApplication.db' });
 
-const ComponentLobby = ({ navigation }) => {
+const LobbyScreen = ({ navigation }) => {
   const [todoList, setTodoList] = useState([]);
 
   const loadTodoList = () => {
@@ -51,7 +50,7 @@ const ComponentLobby = ({ navigation }) => {
               <Text style={{ color: '#000' }}>ABC</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={remove}
+              onPress={() => remove()}
               style={{ backgroundColor: '#fff', padding: 2, marginRight: 10 }}>
               <Text style={{ color: '#000' }}>ABC</Text>
             </TouchableOpacity>
@@ -80,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ComponentLobby;
+export default LobbyScreen;

@@ -2,7 +2,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 
 var db = openDatabase({ name: 'TodoListApplication.db' });
 
-const createDB = () => {
+const CreateDB = () => {
     db.transaction(function (txn) {
         console.log('Running create table task');
         txn.executeSql(
@@ -47,4 +47,4 @@ const createDB = () => {
     });
 }
 
-export { createDB }
+export default CreateDB;

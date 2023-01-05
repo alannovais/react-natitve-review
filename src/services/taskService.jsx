@@ -3,7 +3,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 
 var db = openDatabase({ name: 'TodoListApplication.db' });
 
-const getAllTask = () => {
+const GetAllTask = () => {
     let resultQueryGetAll = [];
     db.transaction(tx => {
         tx.executeSql('SELECT * FROM task', [], (tx, results) => {
@@ -16,7 +16,7 @@ const getAllTask = () => {
     });
 }
 
-const storeTask = (task, navigation) => {
+const StoreTask = (task, navigation) => {
     db.transaction(function (tx) {
         tx.executeSql(
             'INSERT INTO task (title, description, date, completed, user_id) VALUES (?,?,?,?,?)',
@@ -41,7 +41,7 @@ const storeTask = (task, navigation) => {
     });
 };
 
-const updateTask = (task, navigation) => {
+const UpdateTask = (task, navigation) => {
     console.log('update', task);
     db.transaction(function (tx) {
         tx.executeSql(
@@ -67,7 +67,7 @@ const updateTask = (task, navigation) => {
     });
 }
 
-const deleteTask = (taskId, navigation) => {
+const DeleteTask = (taskId, navigation) => {
     console.log('delete', taskId);
     db.transaction(function (tx) {
         tx.executeSql(
@@ -93,5 +93,10 @@ const deleteTask = (taskId, navigation) => {
     });
 }
 
-export { getAllTask, storeTask, updateTask, deleteTask };
+module.exports = {
+    GetAllTask,
+    StoreTask,
+    UpdateTask,
+    DeleteTask
+};
 

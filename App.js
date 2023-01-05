@@ -8,44 +8,16 @@
 
 import React, {useEffect} from 'react';
 import type {Node} from 'react';
-import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
+//navigation
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import ComponentsLogin from './src/pages/login';
-import ComponentLobby from './src/pages/lobby';
-import TodoListManager from './src/pages/TodoListManager';
-import {createDB} from './src/db/createDB';
-
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+//database
+import createDB from './src/db/CreateDB';
+//pages
+import LoginScreen from './src/pages/LoginView';
+import LobbyScreen from './src/pages/LobbyView';
+import TodoListManagerView from './src/pages/TodoListManagerView';
 
 const App: () => Node = () => {
   const Stack = createNativeStackNavigator();
@@ -58,23 +30,21 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Home"
           options={{headerShown: false}}
-          component={ComponentsLogin}
+          component={LoginScreen}
         />
         <Stack.Screen
           name="Lobby"
           options={{headerShown: false}}
-          component={ComponentLobby}
+          component={LobbyScreen}
         />
         <Stack.Screen
           name="TodoListManager"
           options={{headerShown: false}}
-          component={TodoListManager}
+          component={TodoListManagerView}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;

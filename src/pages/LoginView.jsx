@@ -2,7 +2,7 @@
 import React from 'react';
 import {StyleSheet, Button, TextInput, View, Alert} from 'react-native';
 
-const ComponentsLogin = ({navigation}) => {
+const LoginScreen = ({navigation}) => {
   const [login, setLogin] = React.useState('');
   const [password, setPassword] = React.useState(null);
 
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ComponentsLogin;
+export default LoginScreen;

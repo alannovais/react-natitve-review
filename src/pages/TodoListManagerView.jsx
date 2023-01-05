@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
-import { deleteTask, storeTask, updateTask } from '../services/taskService';
+import { View, TextInput, Button } from 'react-native';
+import {
+    StoreTask,
+    UpdateTask,
+    DeleteTask
+} from '../services/TaskService';
 
 class TodoListManagerComponent extends React.Component {
     constructor(props) {
         super(props);
-        const { id } = this.props.route.params;
         this.state = {
             taskId: null,
             userId: null,
@@ -15,8 +18,13 @@ class TodoListManagerComponent extends React.Component {
             time: '',
             completed: false
         }
-        console.log('state =>', this.state);
-        console.log('route =>', id);
+    }
+
+    componentDidMount(){
+        const { id } = this.props.route.params;
+        if (id != null) {
+            this.setState({ taskId: id });
+        }
     }
 
     store = () => {
@@ -28,19 +36,22 @@ class TodoListManagerComponent extends React.Component {
             completed: this.state.completed,
             userId: this.state.userId
         }
-        storeTask(obj, this.props.navigation);
+        StoreTask(obj, this.props.navigation)
     }
 
     update = () => {
         let obj = {
-            taskId, title, description, date, completed
+            taskId: this.state.taskId,
+            title: this.state.title,
+            description: this.state.description,
+            date: this.state.date,
+            completed: this.state.completed,
         }
-        updateTask(obj, navigation);
+        UpdateTask(obj, this.props.navigation);
     }
 
     remove = () => {
-        setTaskId(1);
-        deleteTask(taskId, navigation)
+        DeleteTask(this.state.taskId, this.props.navigation)
     }
 
 
@@ -70,10 +81,10 @@ class TodoListManagerComponent extends React.Component {
     };
 }
 
-const TodoListManager = ({ route, navigation }) => {
+const TodoListManagerView = ({ route, navigation }) => {
     return (
         <TodoListManagerComponent navigation={navigation} route={route} />
     );
 };
 
-export default TodoListManager;
+export default TodoListManagerView;
