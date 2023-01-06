@@ -16,7 +16,7 @@ const CreateDB = () => {
                     console.log('dropped');
                     txn.executeSql(
                         `CREATE TABLE IF NOT EXISTS task(task_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                  title VARCHAR(20), description VARCHAR(100), date DATETIME,
+                  title VARCHAR(20), description VARCHAR(100), date DATETIME, hour VARCHAR(6),
                   completed BOOLEAN, user_id INT(10))`,
                         [],
                     );
@@ -38,7 +38,7 @@ const CreateDB = () => {
                     console.log('dropped');
                     txn.executeSql(
                         `CREATE TABLE IF NOT EXISTS user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                  name VARCHAR(100), email VARCHAR(100), active BOOLEAN)`,
+                  name VARCHAR(100), password VARCHAR(100), active BOOLEAN)`,
                         [],
                     );
                 }

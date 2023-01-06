@@ -28,7 +28,7 @@ const App: () => Node = () => {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Lobby">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
             name="Home"
             options={{headerShown: false}}
@@ -41,6 +41,7 @@ const App: () => Node = () => {
           />
           <Stack.Screen
             name="TodoListManager"
+            options={{headerShown: false}}
             component={TodoListManagerView}
           />
         </Stack.Navigator>

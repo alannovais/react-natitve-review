@@ -17,16 +17,17 @@ const GetAllTask = () => {
 }
 
 const StoreTask = (task, navigation) => {
+    console.log('chego', task);
     db.transaction(function (tx) {
         tx.executeSql(
-            'INSERT INTO task (title, description, date, completed, user_id) VALUES (?,?,?,?,?)',
-            [task.title, task.description, task.date, task.completed],
+            'INSERT INTO task (title, description, date, hour, completed, user_id) VALUES (?,?,?,?,?,?)',
+            [task.title, task.description, task.date, task.hour, task.completed, task.userId],
             (tx, results) => {
                 console.log('Results', results.rowsAffected);
                 if (results.rowsAffected > 0) {
                     Alert.alert(
-                        'Success',
-                        'You are Registered Successfully',
+                        'Tarefa criada com sucesso',
+                        '',
                         [
                             {
                                 text: 'Ok',
@@ -35,7 +36,7 @@ const StoreTask = (task, navigation) => {
                         ],
                         { cancelable: false },
                     );
-                } else { alert('Registration Failed'); }
+                } else { alert('Ops, ocorreu um erro, tente novamente =('); }
             },
         );
     });
@@ -45,14 +46,14 @@ const UpdateTask = (task, navigation) => {
     console.log('update', task);
     db.transaction(function (tx) {
         tx.executeSql(
-            'UPDATE task set title=?, description=?, date=?, completed=? WHERE task_id=?',
-            [task.title, task.description, task.date, task.completed, task.taskId],
+            'UPDATE task set title=?, description=?, date=?, hour=?, completed=? WHERE task_id=?',
+            [task.title, task.description, task.date, task.hour, task.completed, task.taskId],
             (tx, results) => {
                 console.log('Results', results.rowsAffected);
                 if (results.rowsAffected > 0) {
                     Alert.alert(
-                        'Success',
-                        'You are Registered Successfully',
+                        'Registro atualizado',
+                        '',
                         [
                             {
                                 text: 'Ok',
@@ -61,7 +62,7 @@ const UpdateTask = (task, navigation) => {
                         ],
                         { cancelable: false }
                     );
-                } else alert('Registration Failed');
+                } else alert('Ops, ocorreu um erro, tente novamente =(');
             }
         );
     });
@@ -77,8 +78,8 @@ const DeleteTask = (taskId, navigation) => {
                 console.log('Results', results.rowsAffected);
                 if (results.rowsAffected > 0) {
                     Alert.alert(
-                        'Success',
-                        'You are Registered Successfully',
+                        'Registro removido',
+                        '',
                         [
                             {
                                 text: 'Ok',
@@ -87,7 +88,7 @@ const DeleteTask = (taskId, navigation) => {
                         ],
                         { cancelable: false }
                     );
-                } else alert('Registration Failed');
+                } else alert('Ops, ocorreu um erro, tente novamente =(');
             }
         );
     });

@@ -1,24 +1,26 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 import {
   UpdateTask
 } from '../services/TaskService'
 
-import { Box, Checkbox, Divider, Fab, Text, VStack } from 'native-base';
-import { Ionicons } from 'react-native-vector-icons/Ionicons'
-import { FontAwesome } from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-
-//import { AntDesign } from "@ant-design/icons";
+import { Box, Checkbox, Text, VStack } from 'native-base';
+import NavbarComponent from '../components/Navbar';
+import {
+  UpdateUser
+} from '../services/UserService';
 
 var db = openDatabase({ name: 'TodoListApplication.db' });
 
 const LobbyScreen = ({ route, navigation }) => {
   const [todoList, setTodoList] = useState([]);
 
+  useEffect(() => {
+    updateUserActive();
+  }, []);
+  
   const loadTodoList = () => {
     db.transaction(tx => {
       tx.executeSql('SELECT * FROM task', [], (tx, results) => {
@@ -30,15 +32,21 @@ const LobbyScreen = ({ route, navigation }) => {
       });
     });
   };
-
+  
   loadTodoList();
-
-  const edit = (id) => {
-    console.log('edit 2 => ', id);
-    navigation.navigate('TodoListManager', { id });
+  
+  const updateUserActive = () => {
+    let obj = {
+      active: true,
+      userId: route.params.temp[0].user_id
+    }
+    UpdateUser(obj);
+  }
+  
+  const edit = (obj) => {
+    navigation.navigate('TodoListManager', obj);
   };
   const update = (e) => {
-    console.log('e =>', e.completed);
     let obj = {
       taskId: e.task_id,
       title: e.title,
@@ -49,43 +57,50 @@ const LobbyScreen = ({ route, navigation }) => {
     UpdateTask(obj, navigation);
   };
 
+  const getDateFormat = (date) => {
+    if (date) {
+      const weekday = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+      const month = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+      let d = new Date(date)
+      return `${weekday[d.getDay()]}, ${month[d.getMonth()]} ${d.getDate()} ${d.getFullYear()}`;
+    }
+    return '';
+  }
+  
   return (
     <View style={styles.container}>
-      <Icon name="rocket" size={30} color="#900" />
-      <Icon as={Ionicons} name="home" style={{ color: '#000' }} />
-      <Icon
-        as={Ionicons}
-        name={Platform.OS ? 'ios-menu' : 'md-menu'}
-        size={20}
-        color="red"
-      />
-      <Icon as={FontAwesome} name="md-menu" style={{ color: '#000' }} />
-      <Icon name='md-github' size={25} />
-
-      <MaterialCommunityIcons name='ios-book' style={{ color: '#000' }} />
-      <Button onPress={() => edit(null)} title={'add'} />
-
+      <NavbarComponent navigation={navigation} user={route} taskId={null} />
+      <TouchableOpacity onPress={() => edit(null)} style={styles.fakeFabButton}>
+        <Text style={{ textAlign: 'center', marginTop: 13, color: '#fff' }}>+</Text>
+      </TouchableOpacity>
       {todoList.map(e => (
-        <View style={styles.row} key={e.task_id}>
+        < View style={styles.row} key={e.task_id} >
           <TouchableOpacity
-            onPress={() => edit(e.task_id)}
+            onPress={() => edit(e)}
           >
-            <Checkbox isChecked={e.completed}
-              onChange={() => update(e)}
-              value={e.completed}>&nbsp;</Checkbox>
-            <Box border="1" borderRadius="md">
-              <VStack space="2" divider={<Divider />}>
-                <Box px="4" pt="1">
-                  <Text fontSize="lg">{e.title}</Text>
+            <Box flexDirection='row'>
+              <Box marginTop='2.5'>
+                <Checkbox isChecked={e.completed}
+                  onChange={() => update(e)}
+                  value={e.completed}>&nbsp;</Checkbox>
+              </Box>
+              <Box>
+                <Box border="1" borderRadius="md">
+                  <VStack space="2">
+                    <Box px="4" pt="1">
+                      <Text fontSize="lg">{e.title}</Text>
+                    </Box>
+                    <Box px="4" pt="1">
+                      <Text fontSize="xs" >{e.description}</Text>
+                    </Box>
+                    <Box px="4" pb="1">
+                      <Text fontSize="xs" >{`${getDateFormat(e.date)} ${e.hour}`}</Text>
+                    </Box>
+                  </VStack>
                 </Box>
-                <Box px="4" pt="1">
-                  <Text fontSize="xs" >{e.description}</Text>
-                </Box>
-                <Box px="4" pb="1">
-                  <Text fontSize="xs" >{e.date}</Text>
-                </Box>
-              </VStack>
+              </Box>
             </Box>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: '#ccd', width: '100%' }}><Text>&nbsp;</Text></View>
           </TouchableOpacity>
         </View>
       ))
@@ -101,7 +116,6 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    backgroundColor: '#4d0afe',
     justifyContent: 'space-between',
     marginBottom: 5,
     padding: 8,
@@ -109,6 +123,23 @@ const styles = StyleSheet.create({
   textColor: {
     color: '#fff',
   },
+  fakeFabButton: {
+    position: 'absolute',
+    top: 300,
+    right: 50,
+    alignSelf: 'flex-end',
+    borderRadius: 100,
+    backgroundColor: '#4d0afe',
+    height: 50,
+    width: 50
+  },
+  shadowProp: {
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+
 });
 
 export default LobbyScreen;

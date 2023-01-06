@@ -1,20 +1,44 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 import React from 'react';
-import {StyleSheet, Button, TextInput, View, Alert} from 'react-native';
+import { StyleSheet, Button, TextInput, View, Alert } from 'react-native';
+import { StoreUser } from '../services/UserService';
+import { openDatabase } from 'react-native-sqlite-storage';
 
-const LoginScreen = ({navigation}) => {
+var db = openDatabase({ name: 'TodoListApplication.db' });
+
+const LoginScreen = ({ navigation }) => {
   const [login, setLogin] = React.useState('');
-  const [password, setPassword] = React.useState(null);
-
+  const [password, setPassword] = React.useState('');
   const access = () => {
-    console.log('check', login, password);
-    if (login != '' || password != null) {
-      navigation.navigate('Lobby');
-      setLogin('');
-      setPassword(null);
+    if (login != '' || password != '') {
+      db.transaction(tx => {
+        tx.executeSql('SELECT * FROM user WHERE name = ? AND password = ?', [login, password], (tx, results) => {
+          var temp = [];
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push(results.rows.item(i));
+          }
+          temp.length > 0 && navigation.navigate('Lobby', { temp });
+        });
+      });
     } else {
-      Alert.alert('Please check out again! =(', 'Login or Password is wrong', [
-        {text: 'ok', onPress: () => {}},
+      Alert.alert('Hummm, verifica novamente seu usuário e senha =)', [
+        { text: 'ok', onPress: () => { } },
+      ]);
+    }
+  };
+
+  const create = () => {
+    if (login != '' || password != '') {
+      let obj = {
+        name: login,
+        password
+      }
+      StoreUser(obj);
+      setLogin('');
+      setPassword('');
+    } else {
+      Alert.alert('Hummm, faltou alguma informação para completar seu cadastro, por favor revise os dados novamente =/', [
+        { text: 'ok', onPress: () => { } },
       ]);
     }
   };
@@ -39,7 +63,15 @@ const LoginScreen = ({navigation}) => {
       <View style={styles.widthSizeInput}>
         <Button
           onPress={access}
-          title={'Sign up'}
+          title={'Entrar'}
+          backgroundColor={'#4d0afe'}
+          color={'#4d0afe'}
+        />
+      </View>
+      <View style={styles.widthSizeInput}>
+        <Button
+          onPress={create}
+          title={'Cadastrar'}
           backgroundColor={'#4d0afe'}
           color={'#4d0afe'}
         />
