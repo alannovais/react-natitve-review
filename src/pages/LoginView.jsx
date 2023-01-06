@@ -1,28 +1,28 @@
 /* eslint-disable react/jsx-no-duplicate-props */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Button, TextInput, View, Alert } from 'react-native';
-import UserService  from '../services/UserService';
+import UserService from '../services/UserService';
 import { openDatabase } from 'react-native-sqlite-storage';
-import {
-  StoreTask,
-  UpdateTask,
-} from '../services/TaskService';
+
 
 var db = openDatabase({ name: 'TodoListApplication.db' });
 
 const LoginScreen = ({ navigation }) => {
   const [login, setLogin] = React.useState('');
   const [password, setPassword] = React.useState('');
+
   const access = () => {
     if (login != '' || password != '') {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM user', [], (tx, results) => {
+        tx.executeSql('SELECT * FROM user WHERE name = ? AND password = ?', [login, password], (tx, results) => {
           var temp = [];
           for (let i = 0; i < results.rows.length; ++i) {
             temp.push(results.rows.item(i));
           }
-          console.log(temp)
           temp.length > 0 && navigation.navigate('Lobby', { temp });
+          if (temp.length == 0) {
+            alert('Hummm, verifica novamente seu usuário e senha =)')
+          }
         });
       });
     } else {
@@ -38,19 +38,9 @@ const LoginScreen = ({ navigation }) => {
         name: login,
         password,
       }
-
-      let obj2 = {
-        title: '',
-        description: '',
-        date: new Date(),
-        hour: '',
-        completed: true,
-        userId: 1,
-    }
-      UserService.newStoreUser(obj);
-      //StoreTask(obj2, null);
-      // setLogin('');
-      // setPassword('');
+      UserService.StoreUser(obj);
+      setLogin('');
+      setPassword('');
     } else {
       Alert.alert('Hummm, faltou alguma informação para completar seu cadastro, por favor revise os dados novamente =/', [
         { text: 'ok', onPress: () => { } },

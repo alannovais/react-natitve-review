@@ -16,31 +16,6 @@ const UserService = {
             });
         });
     },
-    newStoreUser: (user) => {
-        console.log('Results 2', user);
-        db.transaction(function (tx) {
-            tx.executeSql(
-                'INSERT INTO user (name, password) VALUES (?,?)',
-                [user.name, user.password],
-                (tx, results) => {
-                    console.log('Results', results.rowsAffected);
-                    if (results.rowsAffected > 0) {
-                        Alert.alert(
-                            'Success',
-                            'You are Registered Successfully',
-                            [
-                                {
-                                    text: 'Ok',
-                                    onPress: () => navigation.navigate('HomeScreen'),
-                                },
-                            ],
-                            { cancelable: false }
-                        );
-                    } else alert('Registration Failed');
-                }
-            );
-        });
-    },
     StoreUser: (user) => {
         db.transaction(function (tx) {
             tx.executeSql(
@@ -66,7 +41,6 @@ const UserService = {
         });
     },
     UpdateUser: (user) => {
-        console.log('update', user);
         db.transaction(function (tx) {
             tx.executeSql(
                 'UPDATE user set active=? WHERE user_id=?',

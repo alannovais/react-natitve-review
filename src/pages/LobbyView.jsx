@@ -2,15 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import {
-  UpdateTask
-} from '../services/TaskService'
 
 import { Box, Checkbox, Text, VStack } from 'native-base';
 import NavbarComponent from '../components/Navbar';
-import {
-  UpdateUser
-} from '../services/UserService';
+
+import TaskService from '../services/TaskService'
+import UserService from '../services/UserService'; 
 
 var db = openDatabase({ name: 'TodoListApplication.db' });
 
@@ -40,7 +37,7 @@ const LobbyScreen = ({ route, navigation }) => {
       active: true,
       userId: route.params.temp[0].user_id
     }
-    UpdateUser(obj);
+    UserService.UpdateUser(obj);
   }
   
   const edit = (obj) => {
@@ -54,7 +51,7 @@ const LobbyScreen = ({ route, navigation }) => {
       date: e.date,
       completed: !e.completed,
     }
-    UpdateTask(obj, navigation);
+    TaskService.UpdateTask(obj, navigation);
   };
 
   const getDateFormat = (date) => {

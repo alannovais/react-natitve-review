@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Button, TextInput, TouchableOpacity } from 'react-native';
-import {
-    StoreTask,
-    UpdateTask,
-} from '../services/TaskService';
+import TaskService from '../services/TaskService';
 
 //styles frameworks
 import { Box, Checkbox, Input } from 'native-base';
@@ -44,14 +41,6 @@ class TodoListComponent extends React.Component {
         }
     }
 
-    formatDataToStore = () => {
-        let format = new Date(this.state.dateString);
-        let hour = this.state.hourString.split(':')[0];
-        let minutes = this.state.hourString.split(':')[1];
-        let formatRefactory = new Date(format.getFullYear(), format.getMonth(), format.getDate(), hour.padStart(2, '0'), minutes);
-        console.log('format =>', formatRefactory);
-    }
-
     store = () => {
         let obj = {
             title: this.state.title,
@@ -61,7 +50,7 @@ class TodoListComponent extends React.Component {
             completed: this.state.completed,
             userId: this.state.userId
         }
-        StoreTask(obj, this.props.navigation)
+        TaskService.StoreTask(obj, this.props.navigation)
     }
 
     update = () => {
@@ -73,7 +62,7 @@ class TodoListComponent extends React.Component {
             hour: this.state.hourString,
             completed: this.state.completed,
         }
-        UpdateTask(obj, this.props.navigation);
+        TaskService.UpdateTask(obj, this.props.navigation);
     }
 
     save = () => {

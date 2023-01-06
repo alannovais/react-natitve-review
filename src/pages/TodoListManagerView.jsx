@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { View, Alert } from 'react-native';
 import NavbarComponent from '../components/Navbar';
 import TodoListComponent from '../components/TodoListComponent';
-import {
-    DeleteTask
-} from '../services/TaskService';
+
+import TaskService from '../services/TaskService';
 
 const TodoListManagerView = ({ route, navigation }) => {
     const [taskId, setTaskId] = useState(null);
@@ -22,7 +21,7 @@ const TodoListManagerView = ({ route, navigation }) => {
                         onPress: () => console.log("Cancel Pressed"),
                         style: "cancel"
                     },
-                    { text: "Confirmar", onPress: () => DeleteTask(route.params?.task_id, navigation) }
+                    { text: "Confirmar", onPress: () => TaskService.DeleteTask(route.params?.task_id, navigation) }
                 ]
             );
         }
