@@ -3,7 +3,6 @@ import { View, Button, TextInput, TouchableOpacity } from 'react-native';
 import {
     StoreTask,
     UpdateTask,
-    DeleteTask
 } from '../services/TaskService';
 
 //styles frameworks

@@ -13,7 +13,7 @@ import type {Node} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 //database
-import createDB from './src/db/CreateDB';
+import CreateDB from './src/db/CreateDB';
 //pages
 import LoginScreen from './src/pages/LoginView';
 import LobbyScreen from './src/pages/LobbyView';
@@ -23,7 +23,7 @@ import {NativeBaseProvider} from 'native-base';
 const App: () => Node = () => {
   const Stack = createNativeStackNavigator();
   useEffect(() => {
-    createDB();
+    CreateDB();
   }, []);
   return (
     <NativeBaseProvider>
