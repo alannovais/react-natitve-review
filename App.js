@@ -18,6 +18,7 @@ import createDB from './src/db/CreateDB';
 import LoginScreen from './src/pages/LoginView';
 import LobbyScreen from './src/pages/LobbyView';
 import TodoListManagerView from './src/pages/TodoListManagerView';
+import {NativeBaseProvider} from 'native-base';
 
 const App: () => Node = () => {
   const Stack = createNativeStackNavigator();
@@ -25,25 +26,26 @@ const App: () => Node = () => {
     createDB();
   }, []);
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Lobby">
-        <Stack.Screen
-          name="Home"
-          options={{headerShown: false}}
-          component={LoginScreen}
-        />
-        <Stack.Screen
-          name="Lobby"
-          options={{headerShown: false}}
-          component={LobbyScreen}
-        />
-        <Stack.Screen
-          name="TodoListManager"
-          options={{headerShown: false}}
-          component={TodoListManagerView}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Lobby">
+          <Stack.Screen
+            name="Home"
+            options={{headerShown: false}}
+            component={LoginScreen}
+          />
+          <Stack.Screen
+            name="Lobby"
+            options={{headerShown: false}}
+            component={LobbyScreen}
+          />
+          <Stack.Screen
+            name="TodoListManager"
+            component={TodoListManagerView}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
 };
 
